@@ -10,10 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { User, validateUser } = require('../models/user');
+const authorize = require('../middleware/authorization');
 const bcrypt = require('bcrypt');
 const mogoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+router.get('/me', authorize, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('je li ');
+    const user = yield User.findById(req.user._id);
+    res.send(user);
+}));
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = yield User.findOne({ email: req.body.email });
     if (user)

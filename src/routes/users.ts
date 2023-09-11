@@ -1,11 +1,16 @@
 import { Request ,Response } from "express"
 const {User,validateUser}=require('../models/user')
+const authorize = require('../middleware/authorization')
 const bcrypt = require('bcrypt')
 const mogoose = require('mongoose')
 const express = require('express')
 const router = express.Router()
 
-
+router.get('/me',authorize,async(req:any,res:Response)=>{
+    console.log('je li ')
+    const user = await User.findById(req.user._id)
+    res.send(user)
+})
 
 
 router.post('/register',async (req:Request,res:Response)=>{
