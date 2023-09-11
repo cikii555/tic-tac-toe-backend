@@ -1,7 +1,11 @@
 
 import mongoose  from "mongoose"
 import Joi from "joi"
-const User  = mongoose.model('User', new  mongoose.Schema({
+const jwt  = require('jsonwebtoken')
+
+const secretJWTKey = process.env.JWT_SECRET
+
+const userSchema = new  mongoose.Schema({
     name:{
         type: String,
         required:true,
@@ -29,8 +33,14 @@ const User  = mongoose.model('User', new  mongoose.Schema({
         maxLength:255,
          
     },
-    
-}))
+})
+userSchema.methods.generateAuthToken = async function(){
+    const token = jwt.sign({username:this.username,email:this.email},secretJWTKey)
+    return token
+}
+const User  = mongoose.model('User', userSchema)
+
+
 function validateUser(user:any){
     const schema={
         name: Joi.string().min(3).max(55).required(),

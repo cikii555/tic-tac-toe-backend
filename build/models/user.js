@@ -1,10 +1,21 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const mongoose_1 = __importDefault(require("mongoose"));
 const joi_1 = __importDefault(require("joi"));
-const User = mongoose_1.default.model('User', new mongoose_1.default.Schema({
+const jwt = require('jsonwebtoken');
+const secretJWTKey = process.env.JWT_SECRET;
+const userSchema = new mongoose_1.default.Schema({
     name: {
         type: String,
         required: true,
@@ -30,7 +41,14 @@ const User = mongoose_1.default.model('User', new mongoose_1.default.Schema({
         minLength: 3,
         maxLength: 255,
     },
-}));
+});
+userSchema.methods.generateAuthToken = function () {
+    return __awaiter(this, void 0, void 0, function* () {
+        const token = jwt.sign({ username: this.username, email: this.email }, secretJWTKey);
+        return token;
+    });
+};
+const User = mongoose_1.default.model('User', userSchema);
 function validateUser(user) {
     const schema = {
         name: joi_1.default.string().min(3).max(55).required(),
