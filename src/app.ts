@@ -1,11 +1,13 @@
 import express, { Application, Request, Response } from 'express';
+
 import mongoose from 'mongoose';
 import { ConnectOptions } from 'mongoose';
 import {connectDB} from './config/db'
-var User = require('./models/users')
+const users = require('./routes/users')
 const app: Application = express();
 
-
+app.use(express.json())
+app.use('/api/users',users)
 const PORT= process.env.PORT || 5000;
 
 connectDB()
