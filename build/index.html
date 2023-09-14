@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<button id="createGameButton">Create game</button>
+<input type="text" id="gameId" value="gameIdGot">  
+<button id="joinGameButton">Join game </button>
+
+<script>
+var gameIdGot = 0    
+const socket = io();
+var inputElement = document.getElementById("gameId")
+inputElement.value = 
+document.getElementById("createGameButton").addEventListener("click", () => {
+    socket.emit("createGame", "game created");
+});
+ socket.on('gameCreated',(gameId)=>{
+    var inputElement = document.getElementById("gameId")
+    inputElement.value = gameId
+    gameIdGot = gameId
+ })
+document.getElementById("joinGameButton").addEventListener("click", () => {
+    socket.emit("joinGame", gameIdGot);
+});
+</script>
+
+</body>
+</html>

@@ -16,7 +16,6 @@ const mogoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 router.get('/me', authorize, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('je li ');
     const user = yield User.findById(req.user._id);
     res.send(user);
 }));

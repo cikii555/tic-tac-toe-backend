@@ -18,6 +18,7 @@ const path = require('path');
 app.use(express.json())
 app.use('/api/users', users)
 app.use('/api/auth', auth)
+app.use('/api/game',game)
 
 
 
@@ -33,7 +34,7 @@ io.on('connection', (socket:Socket) => {
     socket.on('joinGame', (gameId) => {
         
         if (games[gameId] && games[gameId].state === 'waiting') {
-            
+
             games[gameId].players.push(socket.id);
             socket.join(gameId); 
             io.to(gameId).emit('playerJoined', socket.id);
