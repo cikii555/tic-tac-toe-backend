@@ -1,21 +1,40 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+const { v4: uuidv4 } = require('uuid');
 const db_1 = require("./config/db");
 const users = require('./routes/users');
 const auth = require('./routes/auth');
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
+const game = require('./routes/game');
+const players = {};
+const games = {};
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const path = require('path');
+app.use(express.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
-const PORT = process.env.PORT || 5000;
+app.use('/api/game', game);
 (0, db_1.connectDB)();
-app.use('/', (req, res) => {
-    res.send('Hello world!');
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
 });
-app.listen(PORT, () => {
-    console.log('SERVER IS UP ON PORT:', PORT);
+io.on('connection', (socket) => {
+    socket.on('joinGame', (gameId) => {
+        if (games[gameId] && games[gameId].state === 'waiting') {
+            games[gameId].players.push(socket.id);
+            socket.join(gameId);
+            io.to(gameId).emit('playerJoined', socket.id);
+        }
+        else {
+            socket.emit('gameNotFound');
+        }
+    });
+    socket.on('createGame', msg => {
+        const gameId = uuidv4();
+        games[gameId] = { players: [socket.id], state: 'waiting' };
+        socket.emit('gameCreated', gameId);
+    });
 });
+server.listen(80);
