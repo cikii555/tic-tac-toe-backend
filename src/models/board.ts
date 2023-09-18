@@ -1,37 +1,63 @@
 
-
-
-
-const board = [
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-    [' ', ' ', ' '],
-  ];
-
- const boardTwo = Array.from({ length: 3 }, () => Array(3).fill(null)); 
-
-
- function winningMove(player:any){
-    const WIN_CONDITIONS = [
-        // rows
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        // cols
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        //diagonals
-        [0, 4, 8], [2, 4, 6]
-
+var boardTicTacToe = [
+  [' ', ' ', ' '],
+  [' ', ' ', ' '],
+  [' ', ' ', ' '],
 ];
-for (let i = 0; i < WIN_CONDITIONS.length; i++) {
-  let firstIndex = WIN_CONDITIONS[i][0];
-  let secondIndex = WIN_CONDITIONS[i][1];
-  let thirdIndex = WIN_CONDITIONS[i][2];
-  if(player.content[firstIndex] == player.content[secondIndex] &&
-    player.content[firstIndex] == player.content[thirdIndex] &&
-     player.content[firstIndex] != "") {
-        player.isOver = true;
-        //this.winner = this.content[firstIndex];
+var winner = ' '
+const boardTwo = Array.from({ length: 3 }, () => Array(3).fill(null));
+
+
+function winningMove(board: any) {
+
+  if (winningGameByRow(board) != ' ') {
+    return winner = winningGameByRow(board)
   }
+  else if (winningGameByColumn(board) != ' ') {
+    return winner = winningGameByColumn(board)
+  }
+  else if (winningGameByDiagonal(board) != ' ') {
+    return winner = winningGameByDiagonal(board)
+  }
+  return winner
+
+
 }
- }
- module.exports = board
+
+function winningGameByRow(board: any) {
+  //winning moves by rows 
+  for (let row = 0; row < 3; row++) {
+    let firstIndex = board[row][0]
+    let secondIndex = board[row][1]
+    let thirdIndex = board[row][2]
+    if (firstIndex == secondIndex && thirdIndex == firstIndex && firstIndex != ' ') {
+      return firstIndex;
+    }
+  }
+  return ' ';
+}
+function winningGameByColumn(board: any) {
+  //winning moves by columns
+  for (let col = 0; col < 3; col++) {
+    let firstIndex = board[0][col]
+    let secondIndex = board[1][col]
+    let thirdIndex = board[2][col]
+    if (firstIndex == secondIndex && firstIndex == thirdIndex && firstIndex != ' ') {
+      return firstIndex;
+    }
+  }
+  return ' ';
+}
+function winningGameByDiagonal(board: any) {
+  if (board[0][0] == board[1][1] && boardTicTacToe[0][0] == board[2][2] && board[0][0] != ' ') {
+    return board[1][1]
+  }
+  else if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] != ' ') {
+    return board[1][1]
+  }
+  return ' '
+
+}
+module.exports.boardTicTacToe = boardTicTacToe
+module.exports = winningMove
 

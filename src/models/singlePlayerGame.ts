@@ -1,65 +1,77 @@
-const boardTicTacToe = require('./board')
-
+const { winnigMove} = require('./board')
+ boardTicTacToe = require('./board')
 const playerMoves = []
 var isTie = false
+var winnerTicTacToe = '' 
+var turn = true
+const WinEnum = {
+    DRAW: 'DRAW',
+    X_WINNER: 'X_WINNER',
+    O_WINNER: 'O_WINNER',
+  };
 
-/*socket.on("game.begin", function(data) {
-    symbol = data.symbol; // The server is assigning the symbol
-    myTurn = symbol === "X"; // 'X' starts first
-    renderTurnMessage();
-});*/
-
-function startGame(){
-    var playerOne = {symbol:"X", type:"human"}
-    var AiPlayer = {symbol:"O",type:"ai"}
-}
-function gamePlaying(){
-
-}
-function getPlayerMove(type:string){
-    if (type != "ai"){
-       // makeMove(1,1)
+function gamePlaying(type:string,row:number,column:number){
+    if (calculateTie(boardTicTacToe)){
+        
+         return winnerTicTacToe = WinEnum.DRAW
     }
-    else{
-        //AIMove()
-    }
-}
-module.exports = function AIMove(){
-const emptyPositions = []
-for (let row = 0; row < boardTicTacToe.length; row++) {
-    for (let col = 0; col < boardTicTacToe[row].length; col++) {
-        if (boardTicTacToe[row][col] === ' ') {
-            emptyPositions.push({ row, col });
+    else if (winnigMove(boardTicTacToe)!= ' '){
+        if( winnigMove(boardTicTacToe)==='X'){
+             return winnerTicTacToe = WinEnum.X_WINNER
+        }
+        else{
+           return  winnerTicTacToe = WinEnum.O_WINNER
         }
     }
+    getPlayerMove(type,row,column)
 }
-const randomIndex = Math.floor(Math.random() * emptyPositions.length);
-const randomPosition = emptyPositions[randomIndex];
-console.log(randomPosition)
-board[randomPosition.row][randomPosition.col]= "O"
-console.log(board)
+function getPlayerMove(type:string, row:number, column:number){
+    if (type != "ai"){
+        makeMove(row,column)
+    }
+    else{
+        AIMove()
+    }
+}
+function AIMove(){
+    const emptyPositions = []
+    for (let row = 0; row < boardTicTacToe.length; row++) {
+        for (let col = 0; col < boardTicTacToe[row].length; col++) {
+            if (boardTicTacToe[row][col] === ' ') {
+            emptyPositions.push({ row, col });
+            }
+        }
+    }
+    const randomIndex = Math.floor(Math.random() * emptyPositions.length);
+    const randomPosition = emptyPositions[randomIndex];
+    boardTicTacToe[randomPosition.row][randomPosition.col]= "O"
 }
 
-function getPlayerPosition(){
 
-}
-
-module.exports = function makeMove(row:number, col:number){
+function makeMove(row:number, col:number){
     if(boardTicTacToe[row][col]==' '){
         boardTicTacToe[row][col] = "X"
         playerMoves.push({row,col})
     }
-    console.log(board)
+    console.log(boardTicTacToe)
 
 }
-function calculateTie(){
-    for (let row = 0; row < boardTicTacToe.length; row++) {
-        for (let col = 0; col < boardTicTacToe[row].length; col++) {
+function calculateTie(board:any){
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
             if (boardTicTacToe[row][col] === ' ') {
-                return
+                return false
             }
         }
     return isTie = true
   }
 }
+
+function resetBoardTicTacToe() {
+    for (let row=0; row<= boardTicTacToe.length; row++) {
+      for (let col = 0; col < boardTicTacToe[row].length; col++){
+        boardTicTacToe[row][col] = ' '
+      }
+    }
+  }
 
