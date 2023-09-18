@@ -8,7 +8,9 @@ const game = require('./routes/game')
 const players:{[key:string]:any} ={}
 const games: { [key: string]: any } = {};
 
-
+var getIOInstance = function(){
+  return io;
+};
 
 const express = require('express');
 const app = express();

@@ -1,7 +1,8 @@
 const boardTicTacToe = require('./board')
 
 const playerMoves = []
-const isTie = false
+var isTie = false
+
 /*socket.on("game.begin", function(data) {
     symbol = data.symbol; // The server is assigning the symbol
     myTurn = symbol === "X"; // 'X' starts first
@@ -58,7 +59,7 @@ function calculateTie(){
                 return
             }
         }
-    //this.isTie = true
+    return isTie = true
   }
 }
 

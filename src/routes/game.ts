@@ -22,31 +22,15 @@ router.get('/single-player', async(req:Request,res:Response)=>{
     
 })
 router.get('/multiplayer', async (req: Request, res: Response) => {
-    try {
+
         const game = new Game({
-            started: false
+            started: false,
+            players: 1,
         });
-        await game.save();
-
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Connection', 'keep-alive');
-
-        res.write(`data: ${JSON.stringify({ gameId: game._id, started: false })}\n\n`);
-
-        const intervalId = setInterval(async () => {
-            const updatedGame = await Game.findById(game._id);
-            if (updatedGame.started) {
-                clearInterval(intervalId);
-                res.write(`data: ${JSON.stringify({ started: true })}\n\n`);
-            }
-        }, 1000);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error creating the game');
-    }
-});
-router.get('/check-start',async (req:any,res:Response)=>{
+        await game.save()
+        res.send(game._id)
+})
+router.post('/check-start',async (req:any,res:Response)=>{
     const intervalId = setInterval(async () => {
         const updatedGame = await Game.findById(req.body.id);
         if (updatedGame.started) {
@@ -57,9 +41,12 @@ router.get('/check-start',async (req:any,res:Response)=>{
 })
 router.post('/join-game',async(req:Request,res:Response)=>{
     let game = await Game.findOne({_id:req.body.id})
+    if (game.players === 2){
+        res.send('You cant join game')
+    }
     game.started = true
-    game.save()
-    res.send("pocea igra")
+    game.players = 2
+   await game.save()
     res.send(game)
    
 
