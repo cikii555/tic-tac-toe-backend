@@ -4,22 +4,22 @@ var boardTicTacToe = [
   [' ', ' ', ' '],
   [' ', ' ', ' '],
 ];
-var winner = ' '
+
 const boardTwo = Array.from({ length: 3 }, () => Array(3).fill(null));
 
 
 function winningMove(board: any) {
 
   if (winningGameByRow(board) != ' ') {
-    return winner = winningGameByRow(board)
+    return winningGameByRow(board)
   }
   else if (winningGameByColumn(board) != ' ') {
-    return winner = winningGameByColumn(board)
+    return  winningGameByColumn(board)
   }
   else if (winningGameByDiagonal(board) != ' ') {
-    return winner = winningGameByDiagonal(board)
+    return  winningGameByDiagonal(board)
   }
-  return winner
+  return ' '
 
 
 }

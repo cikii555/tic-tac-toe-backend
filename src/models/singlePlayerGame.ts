@@ -1,8 +1,6 @@
 const { winnigMove} = require('./board')
  boardTicTacToe = require('./board')
 const playerMoves = []
-var isTie = false
-var winnerTicTacToe = '' 
 var turn = true
 const WinEnum = {
     DRAW: 'DRAW',
@@ -13,14 +11,14 @@ const WinEnum = {
 function gamePlaying(type:string,row:number,column:number){
     if (calculateTie(boardTicTacToe)){
         
-         return winnerTicTacToe = WinEnum.DRAW
+         return  WinEnum.DRAW
     }
     else if (winnigMove(boardTicTacToe)!= ' '){
         if( winnigMove(boardTicTacToe)==='X'){
-             return winnerTicTacToe = WinEnum.X_WINNER
+             return  WinEnum.X_WINNER
         }
         else{
-           return  winnerTicTacToe = WinEnum.O_WINNER
+           return  WinEnum.O_WINNER
         }
     }
     getPlayerMove(type,row,column)
@@ -30,10 +28,10 @@ function getPlayerMove(type:string, row:number, column:number){
         makeMove(row,column)
     }
     else{
-        AIMove()
+        aiMove()
     }
 }
-function AIMove(){
+function aiMove(){
     const emptyPositions = []
     for (let row = 0; row < boardTicTacToe.length; row++) {
         for (let col = 0; col < boardTicTacToe[row].length; col++) {
@@ -63,7 +61,7 @@ function calculateTie(board:any){
                 return false
             }
         }
-    return isTie = true
+    return  true
   }
 }
 

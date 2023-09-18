@@ -30,15 +30,7 @@ router.get('/multiplayer', async (req: Request, res: Response) => {
         await game.save()
         res.send(game._id)
 })
-router.post('/check-start',async (req:any,res:Response)=>{
-    const intervalId = setInterval(async () => {
-        const updatedGame = await Game.findById(req.body.id);
-        if (updatedGame.started) {
-            clearInterval(intervalId);
-            res.send(true)
-        }
-    }, 1000);
-})
+
 router.post('/join-game',async(req:Request,res:Response)=>{
     let game = await Game.findOne({_id:req.body.id})
     if (game.players === 2){
