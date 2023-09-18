@@ -14,7 +14,8 @@ const games: { [key: string]: any } = {};
 
 router.get('/single-player', async(req:Request,res:Response)=>{
     let game = new Game({
-        started:true
+        started:true,
+        turn: true
     })
     game.save()
 
@@ -26,6 +27,7 @@ router.get('/multiplayer', async (req: Request, res: Response) => {
         const game = new Game({
             started: false,
             players: 1,
+            turn: true
         });
         await game.save()
         res.send(game._id)

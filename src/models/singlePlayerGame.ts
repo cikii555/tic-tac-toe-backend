@@ -1,7 +1,9 @@
 const { winnigMove} = require('./board')
+const Game = require('../models/gameModel')
  boardTicTacToe = require('./board')
+
 const playerMoves = []
-var turn = true
+
 const WinEnum = {
     DRAW: 'DRAW',
     X_WINNER: 'X_WINNER',
@@ -9,7 +11,7 @@ const WinEnum = {
   };
 
 
-function gamePlaying(type:string,row:number,column:number){
+async function gamePlaying(type:string,row:number,column:number,gameId:any){
     if (calculateTie(boardTicTacToe)){
         
          return  WinEnum.DRAW
@@ -22,27 +24,29 @@ function gamePlaying(type:string,row:number,column:number){
            return  WinEnum.O_WINNER
         }
     }
-    getPlayerMove(type,row,column)
+    var game  = await Game.findOne({_id:gameId})
+    getPlayerMove(type,row,column,game)
 }
-function getPlayerMove(type:string, row:number, column:number){
+function getPlayerMove(type:string, row:number, column:number,game:any){
     if (type == "SINGLE_PLAYER"){
-        if(turn){
-            makeMove(row,column,"X")
+        
+        if(game.turn){
+            makeMove(row,column,"X",game)
         }
         else{
-            move()
+            move(game)
         }
     }
     else{
-        if (turn){
-            makeMove(row,column,"X")
+        if (game.turn){
+            makeMove(row,column,"X",game)
         }
         else{
-            makeMove(row,column, "O")
+            makeMove(row,column, "O",game)
         }
     }
 }
-function move(){
+async function move(game:any){
     const emptyPositions = []
     for (let row = 0; row < boardTicTacToe.length; row++) {
         for (let col = 0; col < boardTicTacToe[row].length; col++) {
@@ -54,16 +58,18 @@ function move(){
     const randomIndex = Math.floor(Math.random() * emptyPositions.length);
     const randomPosition = emptyPositions[randomIndex];
     boardTicTacToe[randomPosition.row][randomPosition.col]= "O"
-    turn  = !turn
+    game.turn  = !game.turn
+    await game.save()
 }
 
 
-function makeMove(row:number, col:number,symbol:string){
+async function makeMove(row:number, col:number,symbol:string,game:any){
     if(boardTicTacToe[row][col]==' '){
         boardTicTacToe[row][col] = symbol
         playerMoves.push({row,col})
     }
-    turn = !turn
+    game.turn  = !game.turn
+    await game.save()
     
 
 }
