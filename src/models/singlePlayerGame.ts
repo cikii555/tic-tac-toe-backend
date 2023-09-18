@@ -8,6 +8,7 @@ const WinEnum = {
     O_WINNER: 'O_WINNER',
   };
 
+
 function gamePlaying(type:string,row:number,column:number){
     if (calculateTie(boardTicTacToe)){
         
@@ -24,14 +25,24 @@ function gamePlaying(type:string,row:number,column:number){
     getPlayerMove(type,row,column)
 }
 function getPlayerMove(type:string, row:number, column:number){
-    if (type != "ai"){
-        makeMove(row,column)
+    if (type == "SINGLE_PLAYER"){
+        if(turn){
+            makeMove(row,column,"X")
+        }
+        else{
+            move()
+        }
     }
     else{
-        aiMove()
+        if (turn){
+            makeMove(row,column,"X")
+        }
+        else{
+            makeMove(row,column, "O")
+        }
     }
 }
-function aiMove(){
+function move(){
     const emptyPositions = []
     for (let row = 0; row < boardTicTacToe.length; row++) {
         for (let col = 0; col < boardTicTacToe[row].length; col++) {
@@ -43,15 +54,17 @@ function aiMove(){
     const randomIndex = Math.floor(Math.random() * emptyPositions.length);
     const randomPosition = emptyPositions[randomIndex];
     boardTicTacToe[randomPosition.row][randomPosition.col]= "O"
+    turn  = !turn
 }
 
 
-function makeMove(row:number, col:number){
+function makeMove(row:number, col:number,symbol:string){
     if(boardTicTacToe[row][col]==' '){
-        boardTicTacToe[row][col] = "X"
+        boardTicTacToe[row][col] = symbol
         playerMoves.push({row,col})
     }
-    console.log(boardTicTacToe)
+    turn = !turn
+    
 
 }
 function calculateTie(board:any){
