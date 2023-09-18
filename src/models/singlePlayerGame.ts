@@ -35,6 +35,7 @@ function getPlayerMove(type:string, row:number, column:number,game:any){
         }
         else{
             move(game)
+            
         }
     }
     else{
