@@ -1,5 +1,6 @@
 const { winnigMove} = require('./board')
 const Game = require('../models/gameModel')
+ io = require('../models/socketcommunication').get();
  boardTicTacToe = require('./board')
 
 const playerMoves = []

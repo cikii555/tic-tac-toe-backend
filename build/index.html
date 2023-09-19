@@ -7,7 +7,7 @@
     </style>
 </head>
 <body>
-<button id="createGameButton">Create game</button>
+<button id="createGameButton">Multi game</button>
 <input type="text" id="gameId" value="gameIdGot">  
 <button id="joinGameButton">Join game </button>
 
@@ -17,12 +17,13 @@ const socket = io();
 var inputElement = document.getElementById("gameId")
 inputElement.value = 
 document.getElementById("createGameButton").addEventListener("click", () => {
-    socket.emit("createGame", "game created");
+    socket.emit("multiplayer", "game created");
 });
- socket.on('gameCreated',(gameId)=>{
+ socket.on('gameStarted',()=>{
+    
     var inputElement = document.getElementById("gameId")
-    inputElement.value = gameId
-    gameIdGot = gameId
+    inputElement.value = "start game"
+    
  })
 document.getElementById("joinGameButton").addEventListener("click", () => {
     socket.emit("joinGame", gameIdGot);
