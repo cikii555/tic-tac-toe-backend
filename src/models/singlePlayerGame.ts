@@ -19,9 +19,11 @@ async function gamePlaying(type:string,row:number,column:number,gameId:any){
     }
     else if (winnigMove(boardTicTacToe)!= ' '){
         if( winnigMove(boardTicTacToe)==='X'){
+            
              return  WinEnum.X_WINNER
         }
         else{
+            
            return  WinEnum.O_WINNER
         }
     }
@@ -70,6 +72,7 @@ async function makeMove(row:number, col:number,symbol:string,game:any){
         boardTicTacToe[row][col] = symbol
         playerMoves.push({row,col})
     }
+    
     game.turn  = !game.turn
     await game.save()
     

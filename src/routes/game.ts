@@ -7,30 +7,42 @@ const { v4: uuidv4 } = require('uuid');
 const io = require('../models/socketcommunication').get();
 
 const players: { [key: string]: any } = {}
-const games: { [key: string]: any } = {};
+const gamesMultiPlayer: { [key: string]: any } = {};
+const gamesSinglePlayer: {[key:string]:any} = {}
+const games: {[key:string]:any} = {}
+
 
 router.get('/single-player', async (req: Request, res: Response) => {
     let game = new Game({
         started: true,
-        turn: true
+        turn: true,
+        playerOne:"123456789"
     })
     game.save()
     res.send(game)
+    
+    games[game._id] = { players: [game.playerOne], state: 'waiting' };
+    io.join(game._id)
+    io.to(game._id).emit("game.begin");
+   
+
 
 })
 
 
 router.get('/multiplayer', async (req: Request, res: Response) => {
-    io.on('gameCreated', () => {
-        console.log("hdasjhskdas")
-    })
+   
     const game = new Game({
         started: false,
         players: 1,
-        turn: true
+        turn: true,
+        playerOne:"5555555"
     });
     await game.save()
+    games[game._id] = {players :[game.playerOne],state:'waiting'}
+    io.join(game._id)
     res.send(game._id)
+    
 })
 
 router.post('/join-game', async (req: Request, res: Response) => {
@@ -42,7 +54,17 @@ router.post('/join-game', async (req: Request, res: Response) => {
     game.started = true
     game.players = 2
     await game.save()
-    io.emit('gameStarted')
+   /* if (games[game._id] && games[game._id].state === 'waiting') {
+
+            games[game._id].players.push(socket.id);
+            socket.join(gameId); 
+            io.to(gameId).emit('playerJoined', socket.id);
+            
+         
+        } else {
+          socket.emit('gameNotFound');
+        }*/
+    
     res.send(game)
 
 });
