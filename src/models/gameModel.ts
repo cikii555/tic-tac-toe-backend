@@ -7,8 +7,7 @@ const gameSchema = new mongoose.Schema({
     players : Number,
     turn : Boolean,
     type: String,
-    playerOne: String,
-    playerTwo: String
+    
 
 })
 

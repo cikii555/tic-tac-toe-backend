@@ -23,13 +23,13 @@ app.use('/api/game',game)
 
 connectDB()
 
-io.on('connect', function (socket:Socket) {
+/*io.on('connect', function (socket:Socket) {
   console.log('Client connected...');
 
   socket.on('join', function (data:any) {
       console.log(data);
   });
-});
+});*/
 app.get("/", (req:any, res:any) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
