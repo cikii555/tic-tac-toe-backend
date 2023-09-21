@@ -58,6 +58,9 @@ function winningGameByDiagonal(board: any) {
   return ' '
 
 }
-module.exports.boardTicTacToe = boardTicTacToe
-module.exports = winningMove
+module.exports = {
+  boardTicTacToe,
+  winningMove
+}
+
 
