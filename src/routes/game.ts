@@ -147,12 +147,6 @@ router.get('/single-player', async (req: Request, res: Response) => {
              players: [socket.id], state: 'waiting', dashboard:boardTicTacToe, type:"SINGLE_PLAYER" };
         console.log(games[game._id])
         socket.join(game._id)
-        console.log("ttt")
-        const room = io.sockets.adapter.rooms[game._id];
-        if (room && room.length>0){
-            console.log('7777')
-        }
-        console.log("rrr")
         io.to(game._id).emit("game.start");
     })
    
