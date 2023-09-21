@@ -9,21 +9,75 @@
 <body>
 <button id="createGameButton">Multi game</button>
 <input type="text" id="gameId" value="gameIdGot">  
+<input type="text" id="startGame" >  
 <button id="joinGameButton">Join game </button>
+<button id="sendRequest">Send request for multiplayer</button>
+<button id="makeMove">Make move </button>
+
 
 <script>
-var gameIdGot = 0    
+var gameIdGot = 0
+var game
+var players
+var gameId
+var dashboard
+var type  
 const socket = io();
 var inputElement = document.getElementById("gameId")
 inputElement.value = 
 document.getElementById("createGameButton").addEventListener("click", () => {
     socket.emit("multiplayer", "game created");
 });
- socket.on('gameStarted',()=>{
+document.getElementById("makeMove").addEventListener("click", () => {
+console.log(game)
+console.log(game.dashboard)
+console.log(game.gameId)
+console.log(game.type)
+    socket.emit("make.move", {dashboard:dashboard, gameId:gameId,players:players,column:0,row:0,type:type});
+});
+document.getElementById('sendRequest').addEventListener('click', () => {
+            // Make a GET request to the /single-player route
+            fetch('http://localhost:80/api/game/multiplayer', {
+                method: 'GET',
+              
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // If you expect JSON response
+                // return response.text(); // If you expect text response
+            })
+            .then(data => {
+                game = data
+                // Handle the response data here
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+        ;
+ /*socket.on('game.start',()=>{
     
     var inputElement = document.getElementById("gameId")
-    inputElement.value = "start game"
+    gameIdGot = "start game"
     
+ })*/
+ 
+ socket.on('game.start',(data)=>{
+    console.log('nesto')
+    console.log(data)
+    game = data
+    dashboard = data.dashboard
+    players = data.players
+    gameId = data.gameId
+    type = data.type
+ })
+ socket.on('move.made',(data)=>{
+    console.log('ovo je doslo sa beka')
+    console.log(data)
  })
 document.getElementById("joinGameButton").addEventListener("click", () => {
     socket.emit("joinGame", gameIdGot);

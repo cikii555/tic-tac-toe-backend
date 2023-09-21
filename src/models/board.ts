@@ -62,5 +62,5 @@ module.exports = {
   boardTicTacToe,
   winningMove
 }
-//module.exports.winnigMove = winningMove
+
 
