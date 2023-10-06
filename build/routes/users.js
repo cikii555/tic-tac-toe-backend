@@ -31,6 +31,8 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
     });
     const salt = yield bcrypt.genSalt(10);
     user.password = yield bcrypt.hash(user.password, salt);
+    const token = yield user.generateAuthToken();
+    res.header('x-auth-token', token);
     user.save();
     res.send(user);
 }));

@@ -25,7 +25,8 @@ router.post('/register', async (req: Request, res: Response) => {
     })
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(user.password, salt)
-
+    const token = await  user.generateAuthToken()
+    res.header('x-auth-token',token)
     user.save()
     res.send(user)
 })
